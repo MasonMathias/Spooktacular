@@ -34,7 +34,7 @@ bool _started = false;
   @override
   void initState() {
     super.initState();
-    _bgm = AudioPlayer()..setReleaseMode(ReleaseMode.loop)..setVolume(0.6);
+    _bgm = AudioPlayer()..setReleaseMode(ReleaseMode.loop)..setVolume(0.1);
   }
 
   Future<void> _startBgm() async {
