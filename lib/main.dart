@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _playSfx(String asset) async {
     final p = AudioPlayer();
-    p.setVolume(1.0);
+    p.setVolume(0.4);
     await p.play(AssetSource(asset));
     p.onPlayerComplete.first.then((_) => p.dispose());
   }
