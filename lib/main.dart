@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final AudioPlayer _bgm;
-bool _started = false;
+  bool _started = false;
 
   @override
   void initState() {
@@ -43,13 +43,20 @@ bool _started = false;
     await _bgm.play(AssetSource('audio/halloweenbgm.mp3'));
   }
 
+  Future<void> _playSfx(String asset) async {
+    final p = AudioPlayer();
+    p.setVolume(1.0);
+    await p.play(AssetSource(asset));
+    p.onPlayerComplete.first.then((_) => p.dispose());
+  }
+
   @override
   void dispose() { _bgm.dispose(); super.dispose(); }
 
-  Widget _tile(String path) {
+  Widget _tile(String path, String audiopath) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Tapped a button'))),
+        onTap: () => _playSfx(audiopath),
         child: Container(
           padding: const EdgeInsets.all(8),
           child: FittedBox(
@@ -85,9 +92,9 @@ bool _started = false;
               Expanded(
                 child: Row(
                   children: [
-                    _tile('assets/images/halloweenghost.png'),
+                    _tile('assets/images/halloweenghost.png', 'audio/goodbutton.mp3'),
                     const SizedBox(width: 12),
-                    _tile('assets/images/halloweenghost2.png'),
+                    _tile('assets/images/halloweenghost2.png', 'audio/ghastscream.mp3'),
                   ],
                 ),
               ),
@@ -95,9 +102,9 @@ bool _started = false;
               Expanded(
                 child: Row(
                   children: [
-                    _tile('assets/images/halloweenpumpkin.png'),
+                    _tile('assets/images/halloweenpumpkin.png', 'audio/ghastscream.mp3'),
                     const SizedBox(width: 12),
-                    _tile('assets/images/halloweenpumpkin2.png'),
+                    _tile('assets/images/halloweenpumpkin2.png', 'audio/ghastscream.mp3'),
                   ],
                 ),
               ),
