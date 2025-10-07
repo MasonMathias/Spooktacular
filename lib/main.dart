@@ -28,6 +28,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final AudioPlayer _bgm;
+bool _started = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _bgm = AudioPlayer()..setReleaseMode(ReleaseMode.loop)..setVolume(0.6);
+  }
+
+  Future<void> _startBgm() async {
+    if (_started) return;
+    _started = true;
+    await _bgm.play(AssetSource('audio/halloweenbgm.mp3'));
+  }
+
+  @override
+  void dispose() { _bgm.dispose(); super.dispose(); }
+
   Widget _tile(String path) {
     return Expanded(
       child: GestureDetector(
@@ -49,31 +67,42 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            tooltip: 'Play music',
+            icon: const Icon(Icons.music_note),
+            onPressed: _startBgm,
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  _tile('assets/images/halloweenghost.png'),
-                  const SizedBox(width: 12),
-                  _tile('assets/images/halloweenghost2.png'),
-                ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _startBgm,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    _tile('assets/images/halloweenghost.png'),
+                    const SizedBox(width: 12),
+                    _tile('assets/images/halloweenghost2.png'),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: Row(
-                children: [
-                  _tile('assets/images/halloweenpumpkin.png'),
-                  const SizedBox(width: 12),
-                  _tile('assets/images/halloweenpumpkin2.png'),
-                ],
+              const SizedBox(height: 12),
+              Expanded(
+                child: Row(
+                  children: [
+                    _tile('assets/images/halloweenpumpkin.png'),
+                    const SizedBox(width: 12),
+                    _tile('assets/images/halloweenpumpkin2.png'),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
